@@ -30,7 +30,7 @@ func ParseGroups(content string) []string {
 	return groups
 }
 
-var reNumbers = regexp.MustCompile(`\d+`)
+var reNumbers = regexp.MustCompile(`-?\d+`)
 
 // ParseLinesToInts takes a string representing lines from a puzzle input
 // or a groups returned by ParseGroups and returns a slice where each element

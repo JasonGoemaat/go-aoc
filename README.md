@@ -21,13 +21,13 @@ inputs go in the same directory.   Here's how i do it:
     ├── go.mod
     └── 2024
         ├── 1
-        │   ├── input.txt
+        │   ├── input.aoc
         │   ├── main.go
-        │   └── sample.txt
+        │   └── sample.aoc
         └── 2
-            ├── input.txt
+            ├── input.aoc
             ├── main.go
-            └── sample.txt
+            └── sample.aoc
 
 Then I run from the 'mysolvers' directory with:
 
@@ -36,10 +36,10 @@ Then I run from the 'mysolvers' directory with:
 Which produces output like this:
 
     PS C:\git\go\advent-workspace\go-aoc-solutions> go run 2024/2/main.go
-    0ms part1("sample.txt") = 2 (GOOD)
-    4ms part1("input.txt") = 660 (GOOD)
-    0ms part2("sample.txt") = 4 (GOOD)
-    4ms part2("input.txt") = 689 (BAD - Expected 889)
+    0ms part1("sample.aoc") = 2 (GOOD)
+    4ms part1("input.aoc") = 660 (GOOD)
+    0ms part2("sample.aoc") = 4 (GOOD)
+    4ms part2("input.aoc") = 689 (BAD - Expected 889)
 
 `2024/2/main.go` looks like this, calling `aoc.Local` for each run passing
 the solving function, a description, the input file name (that is in the
@@ -54,10 +54,10 @@ import (
 
 func main() {
 	// https://adventofcode.com/2024/day/8
-	aoc.Local(part1, "part1", "sample.txt", 2)
-	aoc.Local(part1, "part1", "input.txt", 660)
-	aoc.Local(part2, "part2", "sample.txt", 4)
-	aoc.Local(part2, "part2", "input.txt", 889) // intentionally wrong
+	aoc.Local(part1, "part1", "sample.aoc", 2)
+	aoc.Local(part1, "part1", "input.aoc", 660)
+	aoc.Local(part2, "part2", "sample.aoc", 4)
+	aoc.Local(part2, "part2", "input.aoc", 889) // intentionally wrong
 }
 
 func part1(contents string) interface{} {

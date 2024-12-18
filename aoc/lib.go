@@ -9,6 +9,15 @@ import (
 	"time"
 )
 
+var LoggingEnabled = false
+
+func LogF(format string, args ...interface{}) {
+	if !LoggingEnabled {
+		return
+	}
+	fmt.Printf(format, args...)
+}
+
 func loadString(filePath string) (string, error) {
 	bytes, err := os.ReadFile(filePath)
 	if err != nil {
@@ -19,16 +28,20 @@ func loadString(filePath string) (string, error) {
 
 func solveFile(puzzlePath string, parts ...func(string) interface{}) {
 	contents, err := loadString(puzzlePath)
-	fileName := filepath.Base(puzzlePath)
 	if err != nil {
 		fmt.Println("COULD NOT LOAD:", puzzlePath)
 		return
 	}
+	if len(contents) == 0 {
+		fmt.Printf("NO INPUT IN FILE: %s\n", puzzlePath)
+	}
+
+	fileName := filepath.Base(puzzlePath)
 	fmt.Printf("Using: %s\n", fileName)
 	for i, part := range parts {
 		// check for existing file to override for this test
 		// Example: 2024 Day 3 has a different sample for part 2,
-		// so this looks for a file called 'sample2.txt' when
+		// so this looks for a file called 'sample.aoc' when
 		// processing index 1 representing part 2
 		startTime := time.Now()
 		result := part(contents)
@@ -42,26 +55,37 @@ func solveFile(puzzlePath string, parts ...func(string) interface{}) {
 	}
 }
 
+// GetSubPath returns a full directory path relative to the calling `.go`
+// file.
+func GetSubPath(subPath string) string {
+	_, filename, _, _ := runtime.Caller(1)
+	dir := filepath.Dir(filename)
+	return filepath.Join(dir, subPath)
+}
+
 // SolveLocal takes an array of solver functions and calls them with the
-// contents of 'sample.txt' and 'input.txt' files in the same diretory as
+// contents of 'sample.aoc' and 'input.aoc' files in the same diretory as
 // the `.go` file making the call.   It reports the results and how much
 // time it took for the solving function to run.
 func SolveLocal(parts ...func(string) interface{}) {
 	_, filename, _, _ := runtime.Caller(1)
 	dir := filepath.Dir(filename)
 
-	samplePath := filepath.Join(dir, "sample.txt")
+	samplePath := filepath.Join(dir, "sample.aoc")
 	solveFile(samplePath, parts...)
-	inputPath := filepath.Join(dir, "input.txt")
+	inputPath := filepath.Join(dir, "input.aoc")
 	solveFile(inputPath, parts...)
 }
 
-// sample call: aoc.Local(part1, "Part1", "sample.txt", 14)
+// sample call: aoc.Local(part1, "Part1", "sample.aoc", 14)
 func Local(solver func(string) interface{}, name string, fileName string, expected interface{}) {
 	_, caller, _, _ := runtime.Caller(1)
 	callerDir := filepath.Dir(caller)
 	inputPath := filepath.Join(callerDir, fileName)
 	contents, _ := loadString(inputPath)
+	if len(contents) == 0 {
+		fmt.Printf("EMPTY FILE: %s\n", fileName)
+	}
 	startTime := time.Now()
 	result := solver(contents)
 	endTime := time.Now()
