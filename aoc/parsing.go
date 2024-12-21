@@ -44,12 +44,13 @@ var reNumbers = regexp.MustCompile(`-?\d+`)
 func ParseLinesToInts(lines []string) [][]int {
 	results := make([][]int, len(lines))
 	for i, line := range lines {
-		parts := reNumbers.FindAllString(line, -1)
-		result := make([]int, len(parts))
-		results[i] = result
-		for j, numberString := range parts {
-			result[j], _ = strconv.Atoi(numberString)
-		}
+		// parts := reNumbers.FindAllString(line, -1)
+		// result := make([]int, len(parts))
+		// results[i] = result
+		// for j, numberString := range parts {
+		// 	result[j], _ = strconv.Atoi(numberString)
+		// }
+		results[i] = ParseInts(line)
 	}
 	return results
 }
@@ -60,4 +61,20 @@ func ParseLines(content string) []string {
 	re := regexp.MustCompile("[^\r\n]+")
 	lines := re.FindAllString(content, -1)
 	return lines
+}
+
+// Parse all numbers in possibly multi-line content into a slice.  Used by
+// parseIntsPerLine and ParseLinesToInts.
+func ParseInts(content string) []int {
+	parts := reNumbers.FindAllString(content, -1)
+	result := make([]int, len(parts))
+	for j, numberString := range parts {
+		result[j], _ = strconv.Atoi(numberString)
+	}
+	return result
+}
+
+// Parse multi-line content returning array of numbers for each line
+func ParseIntsPerLine(content string) [][]int {
+	return ParseLinesToInts(ParseLines(content))
 }
