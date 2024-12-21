@@ -22,6 +22,17 @@ type (
 	}
 )
 
+func (node *AStarNode) Length() int {
+	if node == nil {
+		return 0
+	}
+	length := 0
+	for n := node; n.Parent != nil; n = n.Parent {
+		length++
+	}
+	return length
+}
+
 func NewAStar(area *aoc.Area, start, end AStarPosition, valid string) *AStar {
 	result := AStar{
 		Area:       area,
@@ -33,6 +44,13 @@ func NewAStar(area *aoc.Area, start, end AStarPosition, valid string) *AStar {
 	}
 	result.Open[start] = result.CreateOrUpdateNode(nil, start, 0)
 	return &result
+}
+
+func (as *AStar) Reset() {
+	as.Open = map[AStarPosition]*AStarNode{}
+	as.Closed = map[AStarPosition]*AStarNode{}
+	as.Last = nil
+	as.Open[as.Start] = as.CreateOrUpdateNode(nil, as.Start, 0)
 }
 
 // Create new node or update existing node if it exists and the cost is less
@@ -86,6 +104,7 @@ func (as *AStar) CalculateH(pos AStarPosition) int {
 	// simple taxicab
 	return (dx + dy) * 10
 
+	// NOTE: This doesn't actually work, duh!
 	// // slightly prefer diagonal to straight...  In 100x100 open grid from one corner to another,
 	// // taxicab will fill in the whole grid with diagonals to find the shortest path.  This is
 	// // because right 100 and down 100 is the same distance as down 100 and right 100, or down 1, right 100, down 99.
@@ -119,9 +138,21 @@ func (as *AStar) StepShortestPath() (*AStarNode, bool) {
 	for _, node := range as.Open {
 		if smallest == nil || node.F < smallest.F {
 			smallest = node
-		} else if node.F == smallest.F && node.H < smallest.H {
-			// same F, but smaller H?  Prefer closer to target
-			smallest = node
+		} else if node.F == smallest.F {
+			if node.H < smallest.H {
+				// same F, but smaller H, prefer closer to target
+				smallest = node
+			} else if node.H == smallest.H {
+				// no reason to pick one over the other, except we want it to be
+				// deterministic so we use dx first, then dy
+				if smallest.Position.X < node.Position.X {
+					smallest = node
+				} else if smallest.Position.X == node.Position.X {
+					if smallest.Position.Y < node.Position.Y {
+						smallest = node
+					}
+				}
+			}
 		}
 	}
 	as.Last = smallest
