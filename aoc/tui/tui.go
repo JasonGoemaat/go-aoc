@@ -82,7 +82,7 @@ func (model TuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if !model.State.IsDone() {
 			model.State.Step()
 		} else {
-			return model, nil
+			return model, tea.Quit
 		}
 		if model.Auto {
 			if model.Delay > 0 {

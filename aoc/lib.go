@@ -63,6 +63,16 @@ func GetSubPath(subPath string) string {
 	return filepath.Join(dir, subPath)
 }
 
+// Return full path to passed relative path, creating it as a directory if
+// it doesn't already exist.
+func GetOrCreateSubDirectory(subPath string) string {
+	_, filename, _, _ := runtime.Caller(1)
+	dir := filepath.Dir(filename)
+	fullDir := filepath.Join(dir, subPath)
+	_ = os.MkdirAll(fullDir, 0755)
+	return fullDir
+}
+
 // SolveLocal takes an array of solver functions and calls them with the
 // contents of 'sample.aoc' and 'input.aoc' files in the same diretory as
 // the `.go` file making the call.   It reports the results and how much

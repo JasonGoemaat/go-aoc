@@ -53,7 +53,7 @@ import (
 )
 
 func main() {
-	// https://adventofcode.com/2024/day/8
+	// https://adventofcode.com/2024/day/2
 	aoc.Local(part1, "part1", "sample.aoc", 2)
 	aoc.Local(part1, "part1", "input.aoc", 660)
 	aoc.Local(part2, "part2", "sample.aoc", 4)
@@ -61,11 +61,11 @@ func main() {
 }
 
 func part1(contents string) interface{} {
-    return 0
+    return 0 // should actually solve puzzle part 1
 }
 
 func part2(contents string) interface{} {
-    return 0
+    return 0 // should actually solve puzzle part 2
 }
 ```
 
@@ -115,10 +115,12 @@ As an example, the input:
 
 Would return a slice of two slices containing integers:
 
-    result := [][]int{
-        {13, 53, 47, 97},
-        {93, 8, 4, 172}
-    }
+```go
+result := [][]int{
+    {13, 53, 47, 97},
+    {93, 8, 4, 172}
+}
+```
 
 An example would be the same input shown in `aoc.ParseGroups` above
 from [2024 Day 5](https://adventofcode.com/2024/day/5) and using

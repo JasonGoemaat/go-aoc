@@ -10,7 +10,6 @@ type (
 		Closed     map[AStarPosition]*AStarNode
 		Start, End AStarPosition
 		Last       *AStarNode
-		ValidBytes []byte
 	}
 	AStarPosition struct {
 		X, Y int
@@ -33,14 +32,13 @@ func (node *AStarNode) Length() int {
 	return length
 }
 
-func NewAStar(area *aoc.Area, start, end AStarPosition, valid string) *AStar {
+func NewAStar(area *aoc.Area, start, end AStarPosition) *AStar {
 	result := AStar{
-		Area:       area,
-		Open:       map[AStarPosition]*AStarNode{},
-		Closed:     map[AStarPosition]*AStarNode{},
-		Start:      start,
-		End:        end,
-		ValidBytes: []byte(valid),
+		Area:   area,
+		Open:   map[AStarPosition]*AStarNode{},
+		Closed: map[AStarPosition]*AStarNode{},
+		Start:  start,
+		End:    end,
 	}
 	result.Open[start] = result.CreateOrUpdateNode(nil, start, 0)
 	return &result
