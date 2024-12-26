@@ -3,6 +3,14 @@
 Library with helper functions for solving [Advent of Code](https://adventofcode.com/)
 puzzles.
 
+See:
+
+* [General](doc/General.md) - library functions for running tests with expected output, manipulating directories/files
+* [Parsing](doc/Parsing.md) - parsing functions to help with input
+* [Area](doc/Area.md) - structs and funcs to help with maps/grids
+* [AStar](doc/AStar.md) - structs and funcs to do A* pathfinding on Areas
+* [Tui](doc/Tui.md) - package for running a step-based algorithm and displaying a nice text UI
+
 ## Easy quickstart
 
 Add create an empty directory for your project and initialize a go module
